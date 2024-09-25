@@ -1,8 +1,18 @@
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+
+        /**
+         * TODO:
+         * 1. Create the board, randomise the peices on the baord and print the board
+         */
+
+        // 1. 
+        Board board = new Board();
+
+        board.printBoard();
 
         // Randomise the position, needs to be black and white of 1 king, 1 queen, 2 rooks, 2 bishops, 2 knights
+
 
         // Start the loop for the game
 
