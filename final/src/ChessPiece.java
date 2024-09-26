@@ -16,10 +16,27 @@ public abstract class ChessPiece implements Movable {
     }
 
     @Override
-    public abstract boolean isValidMove(int startX, int startY, int endX, int endY);
+    public boolean isValidMove(char startChar, int startInt, char endChar, int endInt) {
+        int startX = startChar - 'a';
+        int startY = startInt - 1;
+        int endX = endChar - 'a';
+        int endY = endInt - 1;
+
+        if (!isInBounds(endX, endY)) {
+            return false;
+        }
+
+        return isValidMovePieceSpecific(startX, startY, endX, endY);
+    }
+
+    protected abstract boolean isValidMovePieceSpecific(int startX, int startY, int endX, int endY);
 
     protected boolean isInBounds(int x, int y) {
-        // TODO, maybe can fit an exception in here
         return x >= 0 && x < 4 && y >= 0 && y < 4;
+    }
+
+    // Get the class name ie. specific type of piece
+    public String getType() {
+        return this.getClass().getSimpleName();
     }
 }

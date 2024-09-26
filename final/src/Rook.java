@@ -5,7 +5,7 @@ public class Rook extends ChessPiece {
     }
 
     @Override
-    public boolean isValidMove(int startX, int startY, int endX, int endY) {
+    public boolean isValidMovePieceSpecific (int startX, int startY, int endX, int endY) {    
         return isInBounds(endX, endY) && (startX == endX || startY == endY);
     }
 }
