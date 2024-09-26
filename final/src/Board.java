@@ -6,8 +6,6 @@ public class Board {
     public Board() {
         // Initialise the board
         initialiseBoardEmpty();
-
-        System.out.println("Board created");
     }
 
     private void initialiseBoardEmpty() {
@@ -27,9 +25,14 @@ public class Board {
     }
 
     public void printBoard() {
+        System.out.println("    (a)(b)(c)(d)");
         for (int i = 0; i < 4; i++) {
+            // TODO, replace with string literal
+            System.out.print("(" + (i + 1) + ") ");
+
+            // TOOD, handelling when there is no piece on the square
             for (int j = 0; j < 4; j++) {
-                System.out.print(squares[i][j].getPiece().getName());
+                System.out.print("[" + squares[i][j].getPiece().getUnicode() + "]");
             }
             System.out.println();
         }

@@ -7,39 +7,35 @@ public class App {
         /**
          * TODO:
          * 1. Create the board, randomise the pieces on the board and print the board
+         * 2. 
          */
 
         // 1. 
+
+        // TODO, bit of tidying to be done in this
         Board board = new Board();
 
         ArrayList<Piece> pieces = new ArrayList<>();
-        pieces.add(new Piece("white king"));
-        pieces.add(new Piece("white queen"));
-        pieces.add(new Piece("white bishop"));
-        pieces.add(new Piece("white bishop"));
-        pieces.add(new Piece("white knight"));
-        pieces.add(new Piece("white knight"));
-        pieces.add(new Piece("white rook"));
-        pieces.add(new Piece("white rook"));
-        pieces.add(new Piece("black king"));
-        pieces.add(new Piece("black queen"));
-        pieces.add(new Piece("black bishop"));
-        pieces.add(new Piece("black bishop"));
-        pieces.add(new Piece("black knight"));
-        pieces.add(new Piece("black knight"));
-        pieces.add(new Piece("black rook"));
-        pieces.add(new Piece("black rook"));
+        pieces.add(new Piece("white king", '\u2654'));
+        pieces.add(new Piece("white queen", '\u2655'));
+        pieces.add(new Piece("white bishop", '\u2657'));
+        pieces.add(new Piece("white bishop", '\u2657'));
+        pieces.add(new Piece("white knight", '\u2658'));
+        pieces.add(new Piece("white knight", '\u2658'));
+        pieces.add(new Piece("white rook", '\u2656'));
+        pieces.add(new Piece("white rook", '\u2656'));
+        pieces.add(new Piece("black king", '\u265A'));
+        pieces.add(new Piece("black queen", '\u265B'));
+        pieces.add(new Piece("black bishop", '\u265D'));
+        pieces.add(new Piece("black bishop", '\u265D'));
+        pieces.add(new Piece("black knight", '\u265E'));
+        pieces.add(new Piece("black knight", '\u265E'));
+        pieces.add(new Piece("black rook", '\u265C'));
+        pieces.add(new Piece("black rook", '\u265C'));
 
         Collections.shuffle(pieces);
         board.initialiseBoardPieces(pieces);
         board.printBoard();
-
-
-        
-
-        // board.printBoard();
-
-        // Randomise the position, needs to be black and white of 1 king, 1 queen, 2 rooks, 2 bishops, 2 knights
 
 
         // Start the loop for the game
