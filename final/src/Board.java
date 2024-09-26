@@ -4,7 +4,6 @@ public class Board {
     private Square[][] squares = new Square[8][8];
 
     public Board() {
-        // Initialise the board
         initialiseBoardEmpty();
     }
 
@@ -16,7 +15,7 @@ public class Board {
         }
     }
 
-    public void initialiseBoardPieces(ArrayList<Piece> pieces) {
+    public void initialiseBoardPieces(ArrayList<ChessPiece> pieces) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 squares[i][j].setPiece(pieces.get((i * 4) + j));

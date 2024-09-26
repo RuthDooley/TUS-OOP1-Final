@@ -1,12 +1,11 @@
 public class Square {
     private int x; 
     private int y; 
-    private Piece piece;
+    private ChessPiece piece;
 
     public Square(int x, int y) {
         this.x = x;
         this.y = y;
-        // System.out.println("Square created at " + x + ", " + y);
     }
 
     public int getX() {
@@ -17,11 +16,11 @@ public class Square {
         return y;
     }
 
-    public void setPiece(Piece piece) {
+    public void setPiece(ChessPiece piece) {
         this.piece = piece;
     }
 
-    public Piece getPiece() {
+    public ChessPiece getPiece() {
         return piece;
     }
 }
