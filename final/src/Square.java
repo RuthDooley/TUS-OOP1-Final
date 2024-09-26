@@ -1,7 +1,7 @@
 public class Square {
     private int x; 
     private int y; 
-    // TODO, the piece that is on the square
+    private Piece piece;
 
     public Square(int x, int y) {
         this.x = x;
@@ -15,5 +15,13 @@ public class Square {
 
     public int getY() {
         return y;
+    }
+
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+    }
+
+    public Piece getPiece() {
+        return piece;
     }
 }
