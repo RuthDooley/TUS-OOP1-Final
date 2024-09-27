@@ -15,9 +15,6 @@ public class App {
 
         // 1. 
 
-        // Create the board
-        Board board = new Board();
-
         // Create all of the pieces
         ArrayList<ChessPiece> pieces = new ArrayList<>();
         pieces.add(new King(Colour.WHITE, '\u2654'));
@@ -41,7 +38,10 @@ public class App {
         Collections.shuffle(pieces);
 
         // Place the pieces one after the other in the squares
-        board.initialiseBoardPieces(pieces);
+        // Board board = new Board();
+        // board.initialiseBoardPieces(pieces);
+
+        Board board = new Board(pieces);
 
         // Print the game state
         board.print();

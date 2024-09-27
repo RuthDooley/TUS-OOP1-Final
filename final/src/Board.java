@@ -7,6 +7,11 @@ public class Board {
         initialiseBoardEmpty();
     }
 
+    public Board(ArrayList<ChessPiece> pieces) {
+        this();
+        this.initialiseBoardPieces(pieces);
+    }
+
     // Init board with square objects
     private void initialiseBoardEmpty() {
         for (int i = 0; i < 4; i++) {
