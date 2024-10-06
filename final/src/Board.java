@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.Random;
 
 public class Board {
     private Square[][] squares = new Square[4][4];
@@ -7,7 +7,7 @@ public class Board {
         initialiseBoardEmpty();
     }
 
-    public Board(ArrayList<ChessPiece> pieces) {
+    public Board(ChessPiece... pieces) {
         this();
         this.initialiseBoardPieces(pieces);
     }
@@ -21,11 +21,18 @@ public class Board {
         }
     }
 
-    // Init the square objects of the board with piece objects
-    public void initialiseBoardPieces(ArrayList<ChessPiece> pieces) {
+    // PROJECT SPEC: VARARGS
+    // Init the square objects of the board with piece objects using varargs, null if no piece
+    public void initialiseBoardPieces(ChessPiece... pieces) {
+        int pieceIndex = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                squares[i][j].setPiece(pieces.get((i * 4) + j));
+                if (pieceIndex < pieces.length) {
+                    squares[i][j].setPiece(pieces[pieceIndex]);
+                } else {
+                    squares[i][j].setPiece(null);
+                }
+                pieceIndex++;
             }
         }
     }
@@ -49,81 +56,97 @@ public class Board {
         }
     }
 
-/*
- * Game lost when:
- * - No white queen is on the board
- * - No valid move for the current turn colour
- * 
- * Game won when:
- * - White queen is the last remaining piece
- * 
- * Return true when game is over, return false when game is not over
- */
-public boolean isGameOver(Colour currentTurn) {
-    boolean hasWhiteQueen = false;
-    boolean hasMovablePiece = false;
-    boolean hasWhiteQueenOnly = true;
+    // Fisher-Yates shuffle for the pieces on the board, complexity O(n)
+    public void shuffle() {
+        Random rand = new Random();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                int randomI = rand.nextInt(4);
+                int randomJ = rand.nextInt(4);
 
-    System.out.println("----- Checking game over conditions start -----");
-
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            ChessPiece piece = squares[i][j].getPiece();
-            if (piece != null) {
-                if (!hasMovablePiece && piece.getColour() == currentTurn) {
-                    System.out.println("\tChecking piece: " + piece.getUnicode());
-
-                    /*
-                     * Traverse the board.
-                     * If there is a square with a piece on it that:
-                     * - Is opposite colour to the main piece
-                     * - Valid move then valid move exists
-                     */
-                    for (int x = 0; x < 4; x++) {
-                        for (int y = 0; y < 4; y++) {
-                            ChessPiece targetPiece = squares[x][y].getPiece();
-                            if (!hasMovablePiece && (targetPiece != null && targetPiece.getColour() != currentTurn && piece.isValidMove(i, j, x, y))) {
-                                System.out.println("* Valid move: " + piece.getUnicode() + " from " + (char) ('a' + j) + (i + 1) + " to " + (char) ('a' + y) + (x + 1));
-                                hasMovablePiece = true;
-                            }
-                        }
-                    }
-                }
-                // If white queen is on the board, continue
-                if (!hasWhiteQueen && piece instanceof Queen && piece.getColour() == Colour.WHITE) {
-                    System.out.println("* White queen on the board: " + piece.getUnicode());
-                    hasWhiteQueen = true;
-                }
-                
-                // Check if the piece is not the white queen
-                if (hasWhiteQueenOnly && !(piece instanceof Queen && piece.getColour() == Colour.WHITE)) {
-                    hasWhiteQueenOnly = false;
-                }
+                // Swap pieces
+                ChessPiece temp = squares[i][j].getPiece();
+                squares[i][j].setPiece(squares[randomI][randomJ].getPiece());
+                squares[randomI][randomJ].setPiece(temp);
             }
         }
     }
-    System.out.println("----- Checking game over conditions end -----");
 
-    // Game lost when no white queen is on the board
-    if (!hasWhiteQueen) {
-        System.out.println("Game lost, no white queen on the board.");
-        return true;
+    /*
+    * Game lost when:
+    * - No white queen is on the board
+    * - No valid move for the current turn colour
+    * 
+    * Game won when:
+    * - White queen is the last remaining piece
+    * 
+    * Return true when game is over, return false when game is not over
+    */
+    public boolean isGameOver(Colour currentTurn) {
+        boolean hasWhiteQueen = false;
+        boolean hasMovablePiece = false;
+        boolean hasWhiteQueenOnly = true;
+
+        System.out.println("----- Checking game over conditions start -----");
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                ChessPiece piece = squares[i][j].getPiece();
+                if (piece != null) {
+                    if (!hasMovablePiece && piece.getColour() == currentTurn) {
+                        System.out.println("\tChecking piece: " + piece.getUnicode());
+
+                        /*
+                        * Traverse the board.
+                        * If there is a square with a piece on it that:
+                        * - Is opposite colour to the main piece
+                        * - Valid move then valid move exists
+                        */
+                        for (int x = 0; x < 4; x++) {
+                            for (int y = 0; y < 4; y++) {
+                                ChessPiece targetPiece = squares[x][y].getPiece();
+                                if (!hasMovablePiece && (targetPiece != null && targetPiece.getColour() != currentTurn && piece.isValidMove(i, j, x, y))) {
+                                    System.out.println("* Valid move: " + piece.getUnicode() + " from " + (char) ('a' + j) + (i + 1) + " to " + (char) ('a' + y) + (x + 1));
+                                    hasMovablePiece = true;
+                                }
+                            }
+                        }
+                    }
+                    // If white queen is on the board, continue
+                    if (!hasWhiteQueen && piece instanceof Queen && piece.getColour() == Colour.WHITE) {
+                        System.out.println("* White queen on the board: " + piece.getUnicode());
+                        hasWhiteQueen = true;
+                    }
+                    
+                    // Check if the piece is not the white queen
+                    if (hasWhiteQueenOnly && !(piece instanceof Queen && piece.getColour() == Colour.WHITE)) {
+                        hasWhiteQueenOnly = false;
+                    }
+                }
+            }
+        }
+        System.out.println("----- Checking game over conditions end -----");
+
+        // Game lost when no white queen is on the board
+        if (!hasWhiteQueen) {
+            System.out.println("Game lost, no white queen on the board.");
+            return true;
+        }
+
+        // Game lost when no valid move for the current turn colour
+        if (!hasMovablePiece) {
+            System.out.println("Game lost, no valid move for the current turn colour.");
+            return true;
+        }
+
+        // Game won when white queen is the last remaining piece
+        if (hasWhiteQueenOnly) {
+            System.out.println("Game won, white queen is the last remaining piece.");
+            return true;
+        }
+
+        return false;
     }
-
-    // Game lost when no valid move for the current turn colour
-    if (!hasMovablePiece) {
-        System.out.println("Game lost, no valid move for the current turn colour.");
-        return true;
-    }
-
-    // Game won when white queen is the last remaining piece
-    if (hasWhiteQueenOnly) {
-        System.out.println("Game won, white queen is the last remaining piece.");
-        return true;
-    }
-
-    return false;
-}
 
     public void movePiece (Square startSquare, Square endSquare){
         endSquare.setPiece(startSquare.getPiece());

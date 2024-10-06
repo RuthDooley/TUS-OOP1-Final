@@ -1,7 +1,8 @@
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Scanner;
+
+// TODO, remove all of the project spec comments
+// TODO, remove all of the TODO comments
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -15,33 +16,28 @@ public class App {
 
         // 1. 
 
-        // Create all of the pieces
-        ArrayList<ChessPiece> pieces = new ArrayList<>();
-        pieces.add(new King(Colour.WHITE, '\u2654'));
-        pieces.add(new Queen(Colour.WHITE, '\u2655'));
-        pieces.add(new Bishop(Colour.WHITE, '\u2657'));
-        pieces.add(new Bishop(Colour.WHITE, '\u2657'));
-        pieces.add(new Knight(Colour.WHITE, '\u2658'));
-        pieces.add(new Knight(Colour.WHITE, '\u2658'));
-        pieces.add(new Rook(Colour.WHITE, '\u2656'));
-        pieces.add(new Rook(Colour.WHITE, '\u2656'));
-        pieces.add(new King(Colour.BLACK, '\u265A'));
-        pieces.add(new Queen(Colour.BLACK, '\u265B'));
-        pieces.add(new Bishop(Colour.BLACK, '\u265D'));
-        pieces.add(new Bishop(Colour.BLACK, '\u265D'));
-        pieces.add(new Knight(Colour.BLACK, '\u265E'));
-        pieces.add(new Knight(Colour.BLACK, '\u265E'));
-        pieces.add(new Rook(Colour.BLACK, '\u265C'));
-        pieces.add(new Rook(Colour.BLACK, '\u265C'));
+        // Initialize the board with varargs
+        Board board = new Board(
+            new King(Colour.WHITE, '\u2654'),
+            new Queen(Colour.WHITE, '\u2655'),
+            new Bishop(Colour.WHITE, '\u2657'),
+            new Bishop(Colour.WHITE, '\u2657'),
+            new Knight(Colour.WHITE, '\u2658'),
+            new Knight(Colour.WHITE, '\u2658'),
+            new Rook(Colour.WHITE, '\u2656'),
+            new Rook(Colour.WHITE, '\u2656'),
+            new King(Colour.BLACK, '\u265A'),
+            new Queen(Colour.BLACK, '\u265B'),
+            new Bishop(Colour.BLACK, '\u265D'),
+            new Bishop(Colour.BLACK, '\u265D'),
+            new Knight(Colour.BLACK, '\u265E'),
+            new Knight(Colour.BLACK, '\u265E'),
+            new Rook(Colour.BLACK, '\u265C'),
+            new Rook(Colour.BLACK, '\u265C')
+        );
 
-        // Randomise the ordering of the pieces
-        Collections.shuffle(pieces);
-
-        // Place the pieces one after the other in the squares
-        // Board board = new Board();
-        // board.initialiseBoardPieces(pieces);
-
-        Board board = new Board(pieces);
+        // Quick shuffle of the pieces
+        board.shuffle();
 
         // Print the game state
         board.print();
@@ -49,7 +45,7 @@ public class App {
         // 2.
         Scanner scanner = new Scanner(System.in);
         Colour currentTurn = Colour.WHITE;
-        Date now = new Date();
+        Date startTime = new Date();
         while (!board.isGameOver(currentTurn)){
 
             //3
@@ -150,6 +146,45 @@ public class App {
             board.print();
             currentTurn = (currentTurn == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
         }
+
+        Date endTime = new Date();
+        long elapsedTime = endTime.getTime() - startTime.getTime();
+        long elapsedSeconds = elapsedTime / 1000;
+        long elapsedMinutes = elapsedSeconds / 60;
+        elapsedSeconds = elapsedSeconds % 60;
+
+        // Print the elapsed time
+        System.out.println("Time taken for the puzzle: " + elapsedMinutes + " minutes and " + elapsedSeconds + " seconds.");
+
         scanner.close();
     }
 }
+
+
+/**
+ *         // Create all of the pieces
+        ArrayList<ChessPiece> pieces = new ArrayList<>();
+        pieces.add(new King(Colour.WHITE, '\u2654'));
+        pieces.add(new Queen(Colour.WHITE, '\u2655'));
+        pieces.add(new Bishop(Colour.WHITE, '\u2657'));
+        pieces.add(new Bishop(Colour.WHITE, '\u2657'));
+        pieces.add(new Knight(Colour.WHITE, '\u2658'));
+        pieces.add(new Knight(Colour.WHITE, '\u2658'));
+        pieces.add(new Rook(Colour.WHITE, '\u2656'));
+        pieces.add(new Rook(Colour.WHITE, '\u2656'));
+        pieces.add(new King(Colour.BLACK, '\u265A'));
+        pieces.add(new Queen(Colour.BLACK, '\u265B'));
+        pieces.add(new Bishop(Colour.BLACK, '\u265D'));
+        pieces.add(new Bishop(Colour.BLACK, '\u265D'));
+        pieces.add(new Knight(Colour.BLACK, '\u265E'));
+        pieces.add(new Knight(Colour.BLACK, '\u265E'));
+        pieces.add(new Rook(Colour.BLACK, '\u265C'));
+        pieces.add(new Rook(Colour.BLACK, '\u265C'));
+
+        Board board = new Board();
+
+        For the logging create a baord object with no paramaters
+        Store the order of the pieces in an array list or list
+        place the pieces in the board object
+        
+ */
