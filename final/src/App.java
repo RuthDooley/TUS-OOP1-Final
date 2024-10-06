@@ -50,10 +50,10 @@ public class App {
         Scanner scanner = new Scanner(System.in);
         Colour currentTurn = Colour.WHITE;
         Date now = new Date();
-        while (!board.isGameOver()){
+        while (!board.isGameOver(currentTurn)){
 
             //3
-            // TODO, replace with string literal
+            // TODO, replace with string literal and correct colour
             System.out.println("Select the square of the white piece you wish to move: ");
             String startPosition = scanner.nextLine();
 
@@ -128,10 +128,11 @@ public class App {
                     throw new IllegalStateException("The selected piece " + endPiece.getUnicode() + " is the same colour as the current turn.");
                 }
 
-                // e 
-                if (endPiece.getType() == "King" && endPiece.getColour() == Colour.WHITE) {
-                    throw new IllegalStateException("The selected piece " + endPiece.getUnicode() + " is the white king.");
-                }
+                // Changed the design, want to be able ot capture the white king, triggers game over
+                // // e 
+                // if (endPiece.getType() == "King" && endPiece.getColour() == Colour.WHITE) {
+                //     throw new IllegalStateException("The selected piece " + endPiece.getUnicode() + " is the white king.");
+                // }
             } catch (IllegalArgumentException | IllegalStateException e) {
                 System.out.println(e.getMessage());
                 continue;

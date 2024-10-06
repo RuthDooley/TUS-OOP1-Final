@@ -15,17 +15,26 @@ public abstract class ChessPiece implements Movable {
         return unicode;
     }
 
+    // PROJECT SEPC: OVERLOADING
     @Override
     public boolean isValidMove(char startChar, int startInt, char endChar, int endInt) {
         int startX = startChar - 'a';
         int startY = startInt - 1;
         int endX = endChar - 'a';
         int endY = endInt - 1;
-
+    
         if (!isInBounds(endX, endY)) {
             return false;
         }
-
+    
+        return isValidMovePieceSpecific(startX, startY, endX, endY);
+    }
+    
+    public boolean isValidMove(int startX, int startY, int endX, int endY) {
+        if (!isInBounds(endX, endY)) {
+            return false;
+        }
+    
         return isValidMovePieceSpecific(startX, startY, endX, endY);
     }
 

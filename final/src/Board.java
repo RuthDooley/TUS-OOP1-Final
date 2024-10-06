@@ -49,18 +49,81 @@ public class Board {
         }
     }
 
-    // Game over when only the white queen exists
-    public boolean isGameOver (){
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                // TODO, give condition if the piece is null
-                if (squares[i][j].getPiece().getType() != "Queen" && squares[i][j].getPiece().getColour() != Colour.WHITE) {
-                    return false;
+/*
+ * Game lost when:
+ * - No white queen is on the board
+ * - No valid move for the current turn colour
+ * 
+ * Game won when:
+ * - White queen is the last remaining piece
+ * 
+ * Return true when game is over, return false when game is not over
+ */
+public boolean isGameOver(Colour currentTurn) {
+    boolean hasWhiteQueen = false;
+    boolean hasMovablePiece = false;
+    boolean hasWhiteQueenOnly = true;
+
+    System.out.println("----- Checking game over conditions start -----");
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            ChessPiece piece = squares[i][j].getPiece();
+            if (piece != null) {
+                if (!hasMovablePiece && piece.getColour() == currentTurn) {
+                    System.out.println("\tChecking piece: " + piece.getUnicode());
+
+                    /*
+                     * Traverse the board.
+                     * If there is a square with a piece on it that:
+                     * - Is opposite colour to the main piece
+                     * - Valid move then valid move exists
+                     */
+                    for (int x = 0; x < 4; x++) {
+                        for (int y = 0; y < 4; y++) {
+                            ChessPiece targetPiece = squares[x][y].getPiece();
+                            if (!hasMovablePiece && (targetPiece != null && targetPiece.getColour() != currentTurn && piece.isValidMove(i, j, x, y))) {
+                                System.out.println("* Valid move: " + piece.getUnicode() + " from " + (char) ('a' + j) + (i + 1) + " to " + (char) ('a' + y) + (x + 1));
+                                hasMovablePiece = true;
+                            }
+                        }
+                    }
+                }
+                // If white queen is on the board, continue
+                if (!hasWhiteQueen && piece instanceof Queen && piece.getColour() == Colour.WHITE) {
+                    System.out.println("* White queen on the board: " + piece.getUnicode());
+                    hasWhiteQueen = true;
+                }
+                
+                // Check if the piece is not the white queen
+                if (hasWhiteQueenOnly && !(piece instanceof Queen && piece.getColour() == Colour.WHITE)) {
+                    hasWhiteQueenOnly = false;
                 }
             }
         }
+    }
+    System.out.println("----- Checking game over conditions end -----");
+
+    // Game lost when no white queen is on the board
+    if (!hasWhiteQueen) {
+        System.out.println("Game lost, no white queen on the board.");
         return true;
     }
+
+    // Game lost when no valid move for the current turn colour
+    if (!hasMovablePiece) {
+        System.out.println("Game lost, no valid move for the current turn colour.");
+        return true;
+    }
+
+    // Game won when white queen is the last remaining piece
+    if (hasWhiteQueenOnly) {
+        System.out.println("Game won, white queen is the last remaining piece.");
+        return true;
+    }
+
+    return false;
+}
 
     public void movePiece (Square startSquare, Square endSquare){
         endSquare.setPiece(startSquare.getPiece());
