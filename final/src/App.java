@@ -1,5 +1,9 @@
 import java.util.Date;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedWriter;
 
 // TODO, remove all of the project spec comments
 // TODO, remove all of the TODO comments
@@ -8,7 +12,6 @@ public class App {
     public static void main(String[] args) throws Exception {
 
         /**
-         * TODO:
          * 1. Create the board, randomise the pieces on the board and print the board
          * 2. Create the game loop, and on first actionable start the timer
          * 3. Game logic, ask for piece location, piece destination. Confirm or deny action and reload board state.
@@ -39,14 +42,18 @@ public class App {
         // Quick shuffle of the pieces
         board.shuffle();
 
-        // Print the game state
-        board.print();
+        // Report setup, array list of the pieces
+        ArrayList<ChessPiece> pieceLog = board.getPieces();
+        ArrayList<String> movesLog = new ArrayList<>();
 
         // 2.
-        Scanner scanner = new Scanner(System.in);
+        var scanner = new Scanner(System.in); // Scanner scanner = new Scanner(System.in);
+        var startTime = new Date(); // Date startTime = new Date();
         Colour currentTurn = Colour.WHITE;
-        Date startTime = new Date();
         while (!board.isGameOver(currentTurn)){
+
+            // Print the game state
+            board.print();
 
             //3
             // TODO, replace with string literal and correct colour
@@ -143,11 +150,11 @@ public class App {
                 continue;
             }
 
-            board.print();
+            movesLog.add(startPosition + " " + endPosition);
             currentTurn = (currentTurn == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
         }
 
-        Date endTime = new Date();
+        var endTime = new Date(); // Date endTime = new Date();
         long elapsedTime = endTime.getTime() - startTime.getTime();
         long elapsedSeconds = elapsedTime / 1000;
         long elapsedMinutes = elapsedSeconds / 60;
@@ -157,34 +164,48 @@ public class App {
         System.out.println("Time taken for the puzzle: " + elapsedMinutes + " minutes and " + elapsedSeconds + " seconds.");
 
         scanner.close();
+
+        logGame(pieceLog, movesLog);
+    }
+
+    private static void logGame(ArrayList<ChessPiece> pieces, ArrayList<String> moves) {
+        // Create a new board with the initial positions
+        Board boardLog = new Board();
+    
+        // Set the pieces on the board
+        int index = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (index < pieces.size()) {
+                    boardLog.getSquare(j, i).setPiece(pieces.get(index));
+                    index++;
+                }
+            }
+        }
+    
+        try (var writer = new BufferedWriter(new FileWriter("game_replay.txt"))) {
+            writer.write(boardLog.string() + "\n");
+    
+            for (String move : moves) {
+                String[] positions = move.split(" ");
+                String startPosition = positions[0];
+                String endPosition = positions[1];
+    
+                int startFile = startPosition.charAt(0) - 'a';
+                int startRank = Character.getNumericValue(startPosition.charAt(1)) - 1;
+                int endFile = endPosition.charAt(0) - 'a';
+                int endRank = Character.getNumericValue(endPosition.charAt(1)) - 1;
+    
+                Square startSquare = boardLog.getSquare(startFile, startRank);
+                Square endSquare = boardLog.getSquare(endFile, endRank);
+    
+                boardLog.movePiece(startSquare, endSquare);
+    
+                writer.write(boardLog.string() + "\n");
+            }
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
-
-
-/**
- *         // Create all of the pieces
-        ArrayList<ChessPiece> pieces = new ArrayList<>();
-        pieces.add(new King(Colour.WHITE, '\u2654'));
-        pieces.add(new Queen(Colour.WHITE, '\u2655'));
-        pieces.add(new Bishop(Colour.WHITE, '\u2657'));
-        pieces.add(new Bishop(Colour.WHITE, '\u2657'));
-        pieces.add(new Knight(Colour.WHITE, '\u2658'));
-        pieces.add(new Knight(Colour.WHITE, '\u2658'));
-        pieces.add(new Rook(Colour.WHITE, '\u2656'));
-        pieces.add(new Rook(Colour.WHITE, '\u2656'));
-        pieces.add(new King(Colour.BLACK, '\u265A'));
-        pieces.add(new Queen(Colour.BLACK, '\u265B'));
-        pieces.add(new Bishop(Colour.BLACK, '\u265D'));
-        pieces.add(new Bishop(Colour.BLACK, '\u265D'));
-        pieces.add(new Knight(Colour.BLACK, '\u265E'));
-        pieces.add(new Knight(Colour.BLACK, '\u265E'));
-        pieces.add(new Rook(Colour.BLACK, '\u265C'));
-        pieces.add(new Rook(Colour.BLACK, '\u265C'));
-
-        Board board = new Board();
-
-        For the logging create a baord object with no paramaters
-        Store the order of the pieces in an array list or list
-        place the pieces in the board object
-        
- */

@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.ArrayList;
 
 public class Board {
     private Square[][] squares = new Square[4][4];
@@ -56,6 +57,24 @@ public class Board {
         }
     }
 
+    // Board string for file writer
+    public String string () {
+        StringBuilder boardString = new StringBuilder();
+        boardString.append("    (a)(b)(c)(d)\n");
+        for (int i = 0; i < 4; i++) {
+            boardString.append("(").append(i + 1).append(") ");
+            for (int j = 0; j < 4; j++) {
+                if (squares[i][j].getPiece() == null) {
+                    boardString.append("[ ]");
+                } else {
+                    boardString.append("[").append(squares[i][j].getPiece().getUnicode()).append("]");
+                }
+            }
+            boardString.append("\n");
+        }
+        return boardString.toString();
+    }
+
     // Fisher-Yates shuffle for the pieces on the board, complexity O(n)
     public void shuffle() {
         Random rand = new Random();
@@ -74,18 +93,18 @@ public class Board {
 
     /*
     * Game lost when:
-    * - No white queen is on the board
+    * - No white king is on the board
     * - No valid move for the current turn colour
     * 
     * Game won when:
-    * - White queen is the last remaining piece
+    * - White king is the last remaining piece
     * 
     * Return true when game is over, return false when game is not over
     */
     public boolean isGameOver(Colour currentTurn) {
-        boolean hasWhiteQueen = false;
+        boolean hasWhiteKing = false;
         boolean hasMovablePiece = false;
-        boolean hasWhiteQueenOnly = true;
+        boolean hasWhiteKingOnly = true;
 
         System.out.println("----- Checking game over conditions start -----");
 
@@ -112,15 +131,15 @@ public class Board {
                             }
                         }
                     }
-                    // If white queen is on the board, continue
-                    if (!hasWhiteQueen && piece instanceof Queen && piece.getColour() == Colour.WHITE) {
-                        System.out.println("* White queen on the board: " + piece.getUnicode());
-                        hasWhiteQueen = true;
+                    // If white king is on the board, continue
+                    if (!hasWhiteKing && piece instanceof King && piece.getColour() == Colour.WHITE) {
+                        System.out.println("* White king on the board: " + piece.getUnicode());
+                        hasWhiteKing = true;
                     }
                     
                     // Check if the piece is not the white queen
-                    if (hasWhiteQueenOnly && !(piece instanceof Queen && piece.getColour() == Colour.WHITE)) {
-                        hasWhiteQueenOnly = false;
+                    if (hasWhiteKingOnly && !(piece instanceof King && piece.getColour() == Colour.WHITE)) {
+                        hasWhiteKingOnly = false;
                     }
                 }
             }
@@ -128,7 +147,7 @@ public class Board {
         System.out.println("----- Checking game over conditions end -----");
 
         // Game lost when no white queen is on the board
-        if (!hasWhiteQueen) {
+        if (!hasWhiteKing) {
             System.out.println("Game lost, no white queen on the board.");
             return true;
         }
@@ -140,7 +159,7 @@ public class Board {
         }
 
         // Game won when white queen is the last remaining piece
-        if (hasWhiteQueenOnly) {
+        if (hasWhiteKingOnly) {
             System.out.println("Game won, white queen is the last remaining piece.");
             return true;
         }
@@ -155,5 +174,23 @@ public class Board {
 
     public Square getSquare (char boardChar, int boardInt){
         return squares[boardInt - 1][boardChar - 'a'];
+    }
+
+    // PROJECT SPEC: OVERLOADING
+    public Square getSquare (int x, int y){
+        return squares[y][x];
+    }
+
+    public ArrayList<ChessPiece> getPieces() {
+        ArrayList<ChessPiece> pieces = new ArrayList<>();
+        for (int row = 0; row < squares.length; row++) {
+            for (int col = 0; col < squares[row].length; col++) {
+                ChessPiece piece = squares[row][col].getPiece();
+                if (piece != null) {
+                    pieces.add(piece);
+                }
+            }
+        }
+        return pieces;
     }
 }
