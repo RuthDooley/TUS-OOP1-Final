@@ -1,3 +1,3 @@
 public interface Movable {
-    boolean isValidMove(char startChar, int startInt, char endChar, int endInt);
+    public boolean isValidMove(int startX, int startY, int endX, int endY);
 }

@@ -8,6 +8,6 @@ public class Queen extends ChessPiece {
     public boolean isValidMovePieceSpecific (int startX, int startY, int endX, int endY) {    
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);
-        return isInBounds(endX, endY) && (deltaX == deltaY || startX == endX || startY == endY);
+        return deltaX == deltaY || startX == endX || startY == endY;
     }
 }

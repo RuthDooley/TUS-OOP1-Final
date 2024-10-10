@@ -8,6 +8,6 @@ public class King extends ChessPiece {
     public boolean isValidMovePieceSpecific (int startX, int startY, int endX, int endY) {    
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);
-        return isInBounds(endX, endY) && (deltaX <= 1 && deltaY <= 1);
+        return deltaX <= 1 && deltaY <= 1;
     }
 }

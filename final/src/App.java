@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedWriter;
+import java.util.function.Predicate;
 
 // TODO, remove all of the project spec comments
 // TODO, remove all of the TODO comments
@@ -46,6 +47,8 @@ public class App {
         ArrayList<ChessPiece> pieceLog = board.getPieces();
         ArrayList<String> movesLog = new ArrayList<>();
 
+        Predicate<String> isBoardPosition = pos -> pos.matches("[a-d][1-4]");
+
         // 2.
         var scanner = new Scanner(System.in); // Scanner scanner = new Scanner(System.in);
         var startTime = new Date(); // Date startTime = new Date();
@@ -73,8 +76,8 @@ public class App {
             ChessPiece startPiece;
             try {
                 // a & b
-                if (!startPosition.matches("[a-d][1-4]")) {
-                    throw new IllegalArgumentException("Input " + startPosition + " is not the form: 1 letter and 1 number.");
+                if (!isBoardPosition.test(startPosition)) {
+                    throw new IllegalArgumentException("Input " + startPosition + " is not the form: 1 letter (a-d) and 1 number (1-4).");
                 }
 
                 startChar = startPosition.charAt(0);
@@ -113,8 +116,8 @@ public class App {
             ChessPiece endPiece;
             try {
                 // a & b
-                if (!endPosition.matches("[a-d][1-4]")) {
-                    throw new IllegalArgumentException("Input " + endPosition + " is not the form: 1 letter and 1 number.");
+                if (!isBoardPosition.test(endPosition)) {
+                    throw new IllegalArgumentException("Input " + endPosition + " is not the form: 1 letter (a-d) and 1 number (1-4).");
                 }
 
                 endChar = endPosition.charAt(0);
@@ -131,7 +134,7 @@ public class App {
                     throw new IllegalStateException("The selected piece " + endPiece.getUnicode() + " is the same colour as the current turn.");
                 }
 
-                // Changed the design, want to be able ot capture the white king, triggers game over
+                // Changed the design, want to be able to capture the white king, triggers game over
                 // // e 
                 // if (endPiece.getType() == "King" && endPiece.getColour() == Colour.WHITE) {
                 //     throw new IllegalStateException("The selected piece " + endPiece.getUnicode() + " is the white king.");

@@ -8,6 +8,6 @@ public class Knight extends ChessPiece {
     public boolean isValidMovePieceSpecific (int startX, int startY, int endX, int endY) {    
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);
-        return isInBounds(endX, endY) && ((deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2));
+        return (deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2);
     }
 }

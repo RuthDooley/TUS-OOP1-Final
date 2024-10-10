@@ -9,6 +9,6 @@ public class Bishop extends ChessPiece {
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);
     
-        return isInBounds(endX, endY) && deltaX == deltaY;
+        return deltaX == deltaY;
     }
 }
