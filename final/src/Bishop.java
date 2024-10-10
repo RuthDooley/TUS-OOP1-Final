@@ -6,8 +6,8 @@ public class Bishop extends ChessPiece {
 
     @Override
     public boolean isValidMovePieceSpecific (int startX, int startY, int endX, int endY) {    
-        int deltaX = Math.abs(endX - startX);
-        int deltaY = Math.abs(endY - startY);
+        final int deltaX = Math.abs(endX - startX);
+        final int deltaY = Math.abs(endY - startY);
     
         return deltaX == deltaY;
     }

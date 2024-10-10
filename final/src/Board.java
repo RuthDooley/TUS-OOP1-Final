@@ -1,8 +1,10 @@
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Board {
-    private Square[][] squares = new Square[4][4];
+    private final Square[][] squares = new Square[4][4];
 
     public Board() {
         initialiseBoardEmpty();
@@ -44,8 +46,7 @@ public class Board {
         for (int i = 0; i < 4; i++) {
             // TODO, replace with string literal
             System.out.print("(" + (i + 1) + ") ");
-
-            // TOOD, handelling when there is no piece on the square
+            
             for (int j = 0; j < 4; j++) {
                 if (squares[i][j].getPiece() == null) {
                     System.out.print("[ ]");
@@ -58,26 +59,24 @@ public class Board {
     }
 
     // Board string for file writer
-    public String string () {
-        StringBuilder boardString = new StringBuilder();
+    public String string() {
+        final StringBuilder boardString = new StringBuilder();
         boardString.append("    (a)(b)(c)(d)\n");
-        for (int i = 0; i < 4; i++) {
+
+        IntStream.range(0, 4).forEach(i -> {
             boardString.append("(").append(i + 1).append(") ");
-            for (int j = 0; j < 4; j++) {
-                if (squares[i][j].getPiece() == null) {
-                    boardString.append("[ ]");
-                } else {
-                    boardString.append("[").append(squares[i][j].getPiece().getUnicode()).append("]");
-                }
-            }
-            boardString.append("\n");
-        }
+            String row = IntStream.range(0, 4)
+                                  .mapToObj(j -> squares[i][j].getPiece() == null ? "[ ]" : "[" + squares[i][j].getPiece().getUnicode() + "]")
+                                  .collect(Collectors.joining());
+            boardString.append(row).append("\n");
+        });
+
         return boardString.toString();
     }
 
     // Fisher-Yates shuffle for the pieces on the board, complexity O(n)
     public void shuffle() {
-        Random rand = new Random();
+        final Random rand = new Random();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 int randomI = rand.nextInt(4);
@@ -182,7 +181,7 @@ public class Board {
     }
 
     public ArrayList<ChessPiece> getPieces() {
-        ArrayList<ChessPiece> pieces = new ArrayList<>();
+        final ArrayList<ChessPiece> pieces = new ArrayList<>();
         for (int row = 0; row < squares.length; row++) {
             for (int col = 0; col < squares[row].length; col++) {
                 ChessPiece piece = squares[row][col].getPiece();

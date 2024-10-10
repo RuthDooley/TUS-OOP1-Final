@@ -22,10 +22,10 @@ public abstract class ChessPiece implements Movable {
     }
 
     public boolean isValidMove(char startChar, int startInt, char endChar, int endInt) {
-        int startX = startChar - 'a';
-        int startY = startInt - 1;
-        int endX = endChar - 'a';
-        int endY = endInt - 1;
+        final int startX = startChar - 'a';
+        final int startY = startInt - 1;
+        final int endX = endChar - 'a';
+        final int endY = endInt - 1;
     
         return isValidMove(startX, startY, endX, endY);
     }

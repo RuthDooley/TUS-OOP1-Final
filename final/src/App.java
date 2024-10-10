@@ -21,7 +21,7 @@ public class App {
         // 1. 
 
         // Initialize the board with varargs
-        Board board = new Board(
+        final Board board = new Board(
             new King(Colour.WHITE, '\u2654'),
             new Queen(Colour.WHITE, '\u2655'),
             new Bishop(Colour.WHITE, '\u2657'),
@@ -44,10 +44,10 @@ public class App {
         board.shuffle();
 
         // Report setup, array list of the pieces
-        ArrayList<ChessPiece> pieceLog = board.getPieces();
-        ArrayList<String> movesLog = new ArrayList<>();
+        final ArrayList<ChessPiece> pieceLog = board.getPieces();
+        final ArrayList<String> movesLog = new ArrayList<>();
 
-        Predicate<String> isBoardPosition = pos -> pos.matches("[a-d][1-4]");
+        final Predicate<String> isBoardPosition = "[a-d][1-4]"::matches;
 
         // 2.
         var scanner = new Scanner(System.in); // Scanner scanner = new Scanner(System.in);
@@ -173,7 +173,7 @@ public class App {
 
     private static void logGame(ArrayList<ChessPiece> pieces, ArrayList<String> moves) {
         // Create a new board with the initial positions
-        Board boardLog = new Board();
+        final Board boardLog = new Board();
     
         // Set the pieces on the board
         int index = 0;
