@@ -44,7 +44,6 @@ public class Board {
     public void print() {
         System.out.println("    (a)(b)(c)(d)");
         for (int i = 0; i < 4; i++) {
-            // TODO, replace with string literal
             System.out.print("(" + (i + 1) + ") ");
             
             for (int j = 0; j < 4; j++) {

@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.io.BufferedWriter;
 import java.util.function.Predicate;
 
-// TODO, remove all of the project spec comments
-// TODO, remove all of the TODO comments
-
 public class App {
     public static void main(String[] args) throws Exception {
 
@@ -45,9 +42,9 @@ public class App {
 
         // Report setup, array list of the pieces
         final ArrayList<ChessPiece> pieceLog = board.getPieces();
-        final ArrayList<String> movesLog = new ArrayList<>();
+        ArrayList<String> movesLog = new ArrayList<>();
 
-        final Predicate<String> isBoardPosition = "[a-d][1-4]"::matches;
+        final Predicate<String> isBoardPosition = s -> s.matches("[a-d][1-4]");
 
         // 2.
         var scanner = new Scanner(System.in); // Scanner scanner = new Scanner(System.in);
@@ -59,8 +56,7 @@ public class App {
             board.print();
 
             //3
-            // TODO, replace with string literal and correct colour
-            System.out.println("Select the square of the white piece you wish to move: ");
+            System.out.println("Select the square of the " + currentTurn.toString().toLowerCase() + " piece you wish to move: ");
             String startPosition = scanner.nextLine();
 
             /**
@@ -79,7 +75,7 @@ public class App {
                 if (!isBoardPosition.test(startPosition)) {
                     throw new IllegalArgumentException("Input " + startPosition + " is not the form: 1 letter (a-d) and 1 number (1-4).");
                 }
-
+            
                 startChar = startPosition.charAt(0);
                 startInt = Character.getNumericValue(startPosition.charAt(1));
                 // c
@@ -87,18 +83,21 @@ public class App {
                 if (startSquare.isEmpty()) {
                     throw new IllegalStateException("There is no piece on square " + startPosition + ".");
                 }
-
+            
                 // d
                 startPiece = startSquare.getPiece();
                 if (startPiece.getColour() != currentTurn) {
                     throw new IllegalStateException("The selected piece " + startPiece.getUnicode() + " is not the same colour as the current turn.");
                 }
-            } catch (IllegalArgumentException | IllegalStateException e) {
-                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                switch (e) {
+                    case IllegalArgumentException iae -> System.out.println(iae.getMessage());
+                    case IllegalStateException ise -> System.out.println(ise.getMessage());
+                    default -> throw e; 
+                }
                 continue;
             }
 
-            // TODO, replace with string literal
             System.out.println("Choose the destination square to move " + startPiece.getUnicode());
             String endPosition = scanner.nextLine();
 
@@ -135,10 +134,10 @@ public class App {
                 }
 
                 // Changed the design, want to be able to capture the white king, triggers game over
-                // // e 
-                // if (endPiece.getType() == "King" && endPiece.getColour() == Colour.WHITE) {
-                //     throw new IllegalStateException("The selected piece " + endPiece.getUnicode() + " is the white king.");
-                // }
+                // e 
+                if (endPiece.getType() == "King" && endPiece.getColour() == Colour.WHITE) {
+                    throw new IllegalStateException("The selected piece " + endPiece.getUnicode() + " is the white king.");
+                }
             } catch (IllegalArgumentException | IllegalStateException e) {
                 System.out.println(e.getMessage());
                 continue;
@@ -172,15 +171,20 @@ public class App {
     }
 
     private static void logGame(ArrayList<ChessPiece> pieces, ArrayList<String> moves) {
-        // Create a new board with the initial positions
+
+        // Defensive copies of previous data
+        final ArrayList<ChessPiece> piecesCopy = new ArrayList<>(pieces);
+        final ArrayList<String> movesCopy = new ArrayList<>(moves);
+
+        // Create a new empty board, no pieces are any position
         final Board boardLog = new Board();
     
         // Set the pieces on the board
         int index = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                if (index < pieces.size()) {
-                    boardLog.getSquare(j, i).setPiece(pieces.get(index));
+                if (index < piecesCopy.size()) {
+                    boardLog.getSquare(j, i).setPiece(piecesCopy.get(index));
                     index++;
                 }
             }
@@ -189,7 +193,7 @@ public class App {
         try (var writer = new BufferedWriter(new FileWriter("game_replay.txt"))) {
             writer.write(boardLog.string() + "\n");
     
-            for (String move : moves) {
+            for (String move : movesCopy) {
                 String[] positions = move.split(" ");
                 String startPosition = positions[0];
                 String endPosition = positions[1];

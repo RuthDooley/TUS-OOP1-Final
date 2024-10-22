@@ -1,6 +1,6 @@
-public abstract class ChessPiece implements Movable {
-    protected Colour colour; 
-    protected char unicode;
+public abstract sealed class ChessPiece implements Movable permits King, Queen, Bishop, Knight, Rook {
+    private final Colour colour; 
+    private final char unicode;
 
     public ChessPiece(Colour colour, char unicode) {
         this.colour = colour;
@@ -35,5 +35,9 @@ public abstract class ChessPiece implements Movable {
     // Get the class name ie. specific type of piece
     public String getType() {
         return this.getClass().getSimpleName();
+    }
+
+    public String describe() {
+        return "ChessPiece of colour: " + colour;
     }
 }

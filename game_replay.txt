@@ -1,5 +1,4 @@
 Initial board state:
-Board@4617c264
     (a)(b)(c)(d)
 (1) [♖][ ][♜][♛]
 (2) [♔][♕][♖][♘]
